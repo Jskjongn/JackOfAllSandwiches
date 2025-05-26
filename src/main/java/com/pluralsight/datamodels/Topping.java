@@ -42,4 +42,10 @@ public abstract class Topping {
 
     // abstract method
     public abstract double getPrice(int breadSize);
+
+    // displays topping and number of toppings
+    @Override
+    public String toString() {
+        return topping + " x" + (this.numOfExtraToppings + 1);
+    }
 }
