@@ -2,10 +2,11 @@ package com.pluralsight.datamodels;
 
 public abstract class PremiumTopping extends Topping{
 
-    public PremiumTopping(String topping, boolean isExtra) {
-        super(topping, isExtra);
+    // constructor
+    public PremiumTopping(String topping, boolean isExtra, int numOfExtraToppings) {
+        super(topping, isExtra, numOfExtraToppings);
     }
 
     // abstract method
-    public abstract double getPrice();
+    public abstract double getPrice(int breadSize);
 }

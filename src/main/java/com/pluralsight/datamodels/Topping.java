@@ -1,16 +1,18 @@
 package com.pluralsight.datamodels;
 
-// abstract class that implements an Interface
-public abstract class Topping implements Priceable {
+// abstract class
+public abstract class Topping {
 
     // properties
     private String topping;
     private boolean isExtra;
+    private int numOfExtraToppings;
 
     // constructor
-    public Topping(String topping, boolean isExtra) {
+    public Topping(String topping, boolean isExtra, int numOfExtraToppings) {
         this.topping = topping;
         this.isExtra = isExtra;
+        this.numOfExtraToppings = numOfExtraToppings;
     }
 
     // getter and setters
@@ -30,6 +32,14 @@ public abstract class Topping implements Priceable {
         isExtra = extra;
     }
 
+    public int getNumOfExtraToppings() {
+        return numOfExtraToppings;
+    }
+
+    public void setNumOfExtraToppings(int numOfExtraToppings) {
+        this.numOfExtraToppings = numOfExtraToppings;
+    }
+
     // abstract method
-    public abstract double getPrice();
+    public abstract double getPrice(int breadSize);
 }
