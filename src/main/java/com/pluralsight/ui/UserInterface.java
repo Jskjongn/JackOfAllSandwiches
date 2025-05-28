@@ -1,7 +1,10 @@
 package com.pluralsight.ui;
 
-import com.pluralsight.datamodels.Order;
+import com.pluralsight.datamodels.*;
+import com.pluralsight.utility.ReceiptFileManager;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -13,7 +16,8 @@ public class UserInterface {
     private static Order order;
 
     // private constructor
-    private UserInterface() {}
+    private UserInterface() {
+    }
 
     // displays screens and shop options to user
     public static void display() throws InterruptedException {
@@ -53,7 +57,7 @@ public class UserInterface {
                             case 5:
                                 checkout();
                                 continue;
-                            // cancels order and returns to home screen
+                                // cancels order and returns to home screen
                             case 0:
                                 System.out.println("Canceling order... Returning back to home screen!");
                                 orderRunning = false;
@@ -138,6 +142,323 @@ public class UserInterface {
 
     public static void addSandwich() {
 
+        // eats leftover
+        userInput.nextLine();
+
+        // prompt for customer name
+        String customerName = "";
+        while (true) {
+            System.out.print("Could I have a name for the order? ");
+            customerName = userInput.nextLine().trim();
+            if (customerName.isEmpty()) {
+                System.out.println("Please enter a name!");
+            } else {
+                break;
+            }
+        }
+
+        // prompt for here or to-go (take out)
+        boolean isTakeOut = false;
+        while (true) {
+            System.out.print("Is this for Here or To-Go? ");
+            String choice = userInput.nextLine().toLowerCase().trim();
+            if (choice.contains("to")) {
+                isTakeOut = true;
+                break;
+            } else if (choice.contains("here")) {
+                isTakeOut = false;
+                break;
+            } else {
+                System.out.println("Please enter either here or to-go!");
+            }
+        }
+
+        // creates the new order
+        Order order = new Order(customerName, isTakeOut);
+
+        // lists bread sizes and prompts for bread size
+        listOfBreadSizes();
+        int breadSize = 0;
+        while (true) {
+            System.out.print("Enter choice of bread size: ");
+            // input validation and checks if size equals correct bread sizes
+            if (userInput.hasNextInt()) {
+                breadSize = userInput.nextInt();
+                userInput.nextLine();
+                if (breadSize == 4 || breadSize == 8 || breadSize == 12) {
+                    break;
+                } else {
+                    System.out.println("Please enter either 4, 8, or 12 inches!");
+                }
+            } else {
+                System.out.println("Please enter a number!");
+                userInput.nextLine();
+            }
+        }
+
+        // list of breads and prompts for bread type
+        listOfBreads();
+        String breadType = "";
+        while (true) {
+            System.out.print("Enter choice of bread: ");
+            // takes user input and matches input to get the correct bread type
+            if (userInput.hasNext()) {
+                breadType = userInput.nextLine().trim().toLowerCase();
+                if (breadType.startsWith("whi")) {
+                    breadType = "White";
+                    break;
+                } else if (breadType.startsWith("whe")) {
+                    breadType = "Wheat";
+                    break;
+                } else if (breadType.startsWith("r")) {
+                    breadType = "Rye";
+                    break;
+                } else if (breadType.startsWith("wr")) {
+                    breadType = "Wrap";
+                    break;
+                } else {
+                    System.out.println("Please enter a valid bread type!");
+                }
+            }
+        }
+
+        // prompts for regular or toasted
+        toasted();
+        boolean isToasted = false;
+        while (true) {
+            System.out.print("Enter your choice: ");
+            String choice = userInput.nextLine().toLowerCase().trim();
+            if (choice.contains("toast")) {
+                isToasted = true;
+                break;
+            } else if (choice.contains("reg")) {
+                isToasted = false;
+                break;
+            } else {
+                System.out.println("Please enter either regular or toasted!");
+            }
+        }
+
+        // creates a new sandwich using user input
+        Sandwich sandwich = new Sandwich(breadSize, breadType, isToasted);
+
+        // lists meats method and map listing meats
+        listOfMeats();
+        Map<String, String> meatList = new HashMap<>();
+        meatList.put("st", "Steak");
+        meatList.put("h", "Ham");
+        meatList.put("sa", "Salami");
+        meatList.put("ro", "Roast Beef");
+        meatList.put("ch", "Chicken");
+        meatList.put("ba", "Bacon");
+
+        // prompts user to choose meat types and extras until done is entered
+        while (true) {
+            System.out.print("Enter choice of meat (Type \"done\" after picking meats!): ");
+            String meatChoice = userInput.nextLine().toLowerCase().trim();
+
+            // stops loop if done
+            if (meatChoice.equals("done")) break;
+
+            // calls method for matching user input to meat list
+            String meatType = lookupTopping(meatChoice, meatList);
+
+            // if the type is null, it restarts loop
+            if (meatType == null) {
+                System.out.println("Please enter a meat type!");
+                continue;
+            }
+
+            // prompts user for extra meats
+            boolean isExtraMeat = false;
+            int extraMeat = 0;
+            while (true) {
+                System.out.print("Would you like extra " + meatType + "? (Yes/No): ");
+                String choice = userInput.nextLine().toLowerCase().trim();
+                // if yes then how many extras
+                if (choice.equals("yes") || choice.equals("y")) {
+                    isExtraMeat = true;
+                    System.out.print("Enter how many extra (1, 2 , 3, etc): ");
+                    if (userInput.hasNextInt()) {
+                        extraMeat = userInput.nextInt();
+                        userInput.nextLine();
+                        break;
+                    }
+                    // if no then nothing is added and moves on
+                } else if (choice.equals("no") || choice.equals("n")) {
+                    System.out.println("No extra meat added!");
+                    isExtraMeat = false;
+                    break;
+                } else {
+                    System.out.println("Please enter Yes or No!");
+                }
+            }
+
+            // adds meat toppings to sandwich
+            sandwich.addTopping(new Meat(meatType, isExtraMeat, extraMeat));
+        }
+
+        // lists cheeses
+        listOfCheeses();
+        Map<String, String> cheeseList = new HashMap<>();
+        cheeseList.put("am", "American");
+        cheeseList.put("pr", "Provolone");
+        cheeseList.put("ch", "Cheddar");
+        cheeseList.put("sw", "Swiss");
+
+        // prompts user to add cheeses and if any extras
+        while (true) {
+            System.out.print("Enter choice of cheese (Type \"done\" after picking cheese!): ");
+            String cheeseChoice = userInput.nextLine().toLowerCase().trim();
+
+            if (cheeseChoice.equals("done")) break;
+
+            // matching user input with list
+            String cheeseType = lookupTopping(cheeseChoice, cheeseList);
+
+            if (cheeseType == null) {
+                System.out.println("Please enter a cheese type!");
+                continue;
+            }
+
+            // prompts user for extra cheese and how many or if no extra
+            boolean isExtraCheese = false;
+            int extraCheese = 0;
+            while (true) {
+                System.out.print("Would you like extra " + cheeseType + "? (Yes/No): ");
+                String choice = userInput.nextLine().toLowerCase().trim();
+
+                if (choice.equals("yes") || choice.equals("y")) {
+                    isExtraCheese = true;
+                    System.out.print("Enter how many extra (1, 2 , 3, etc): ");
+                    if (userInput.hasNextInt()) {
+                        extraCheese = userInput.nextInt();
+                        userInput.nextLine();
+                        break;
+                    }
+                } else if (choice.equals("no") || choice.equals("n")) {
+                    System.out.println("No extra cheese added!");
+                    isExtraCheese = false;
+                    break;
+                } else {
+                    System.out.println("Please enter Yes or No!");
+                }
+            }
+
+            // adds cheese toppings to sandwich
+            sandwich.addTopping(new Cheese(cheeseType, isExtraCheese, extraCheese));
+        }
+
+        // lists regular toppings
+        listOfRegularToppings();
+        Map<String, String> toppingList = new HashMap<>();
+        toppingList.put("le", "Lettuce");
+        toppingList.put("pe", "Peppers");
+        toppingList.put("on", "Onions");
+        toppingList.put("to", "Tomatoes");
+        toppingList.put("ja", "Jalapeños");
+        toppingList.put("cu", "Cucumbers");
+        toppingList.put("pi", "Pickles");
+        toppingList.put("gu", "Guacamole");
+        toppingList.put("mu", "Mushrooms");
+        toppingList.put("ol", "Olives");
+
+        // prompts user to add regular toppings and if any extras
+        while (true) {
+            System.out.print("Enter choice of regular toppings (Type \"done\" after picking topping!): ");
+            String toppingChoice = userInput.nextLine().toLowerCase().trim();
+
+            if (toppingChoice.equals("done")) break;
+
+            String toppingType = lookupTopping(toppingChoice, toppingList);
+
+            if (toppingType == null) {
+                System.out.println("Please enter a topping type!");
+                continue;
+            }
+
+            boolean isExtraTopping = false;
+            int extraTopping = 0;
+            while (true) {
+                System.out.print("Would you like extra " + toppingType + "? (Yes/No): ");
+                String choice = userInput.nextLine().toLowerCase().trim();
+
+                if (choice.equals("yes") || choice.equals("y")) {
+                    isExtraTopping = true;
+                    System.out.print("Enter how many extra (1, 2 , 3, etc): ");
+                    if (userInput.hasNextInt()) {
+                        extraTopping = userInput.nextInt();
+                        userInput.nextLine();
+                        break;
+                    }
+                } else if (choice.equals("no") || choice.equals("n")) {
+                    System.out.println("No extra toppings added!");
+                    isExtraTopping = false;
+                    break;
+                } else {
+                    System.out.println("Please enter Yes or No!");
+                }
+            }
+
+            // adds regular toppings to sandwich
+            sandwich.addTopping(new RegularTopping(toppingType, isExtraTopping, extraTopping));
+        }
+
+        // lists sauces
+        listOfSauces();
+        Map<String, String> sauceList = new HashMap<>();
+        sauceList.put("ma", "Mayo");
+        sauceList.put("mu", "Mustard");
+        sauceList.put("ke", "Ketchup");
+        sauceList.put("ra", "Ranch");
+        sauceList.put("ch", "Chipotle");
+        sauceList.put("b", "BBQ");
+        sauceList.put("v", "Vinaigrette");
+        sauceList.put("s", "Sriracha");
+
+        // prompts user to add sauces and if any extras
+        while (true) {
+            System.out.print("Enter choice of sauces (Type \"done\" after picking sauces!): ");
+            String sauceChoice = userInput.nextLine().toLowerCase().trim();
+
+            if (sauceChoice.equals("done")) break;
+
+            String sauceType = lookupTopping(sauceChoice, sauceList);
+
+            if (sauceType == null) {
+                System.out.println("Please enter a sauce type!");
+                continue;
+            }
+
+            boolean isExtraSauce = false;
+            int extraSauce = 0;
+            while (true) {
+                System.out.print("Would you like extra " + sauceType + "? (Yes/No): ");
+                String choice = userInput.nextLine().toLowerCase().trim();
+
+                if (choice.equals("yes") || choice.equals("y")) {
+                    isExtraSauce = true;
+                    System.out.print("Enter how many extra (1, 2 , 3, etc): ");
+                    if (userInput.hasNextInt()) {
+                        extraSauce = userInput.nextInt();
+                        userInput.nextLine();
+                        break;
+                    }
+                } else if (choice.equals("no") || choice.equals("n")) {
+                    System.out.println("No extra sauces added!");
+                    isExtraSauce = false;
+                    break;
+                } else {
+                    System.out.println("Please enter Yes or No!");
+                }
+            }
+
+            // adds sauce toppings to sandwich
+            sandwich.addTopping(new RegularTopping(sauceType, isExtraSauce, extraSauce));
+        }
+
+        // adds completed sandwich to the order
+        order.addSandwich(sandwich);
     }
 
     public static void addDrink() {
@@ -162,10 +483,10 @@ public class UserInterface {
     public static void welcomeMessage() throws InterruptedException {
 
         // loading bar
-        for (int i = 0; i <= 100; i++) {
-            Thread.sleep(30);
-            System.out.print("\rLoading... " + i + "%");
-        }
+//        for (int i = 0; i <= 100; i++) {
+//            Thread.sleep(30);
+//            System.out.print("\rLoading... " + i + "%");
+//        }
 
         // greeting message
         System.out.print("\n");
@@ -178,7 +499,7 @@ public class UserInterface {
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                 """);
 
-        Thread.sleep(1500);
+        //Thread.sleep(1500);
     }
 
     // displays exit message
@@ -204,12 +525,24 @@ public class UserInterface {
     }
 
     // -------------------------------------------------------------------------------------------------------
+
+    // helper method to compare user input to a list of toppings and match them
+    public static String lookupTopping(String choice, Map<String, String> list) {
+        for (Map.Entry<String, String> entry : list.entrySet()) {
+            if (choice.startsWith(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    // -------------------------------------------------------------------------------------------------------
     // lists of all menu items and their prices
 
     public static void listOfBreadSizes() {
         System.out.print("""
                 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-                ┃      ~ Sandwich Sizes ~      ┃
+                ┃        ~ Bread Sizes ~       ┃
                 ┃==============================┃
                 ┃       4 Inch     $5.50       ┃
                 ┃       8 Inch     $7.00       ┃
@@ -223,9 +556,8 @@ public class UserInterface {
                 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
                 ┃          ~ Breads ~          ┃
                 ┃==============================┃
-                ┃    White        Rye          ┃
-                ┃    Wheat        Wrap         ┃
-                ┃    Multigrain   Italian Herb ┃
+                ┃      White        Rye        ┃
+                ┃      Wheat        Wrap       ┃
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                 """);
     }
