@@ -17,6 +17,7 @@ public class SignatureSandwich extends Sandwich {
                 setSize(8);
                 setBreadType("White");
                 setToasted(true);
+                setName("BLT");
                 this.addTopping(new Meat("Bacon", false, 0));
                 this.addTopping(new Cheese("Cheddar", false, 0));
                 this.addTopping(new RegularTopping("Lettuce", false, 0));
@@ -27,6 +28,7 @@ public class SignatureSandwich extends Sandwich {
                 setSize(8);
                 setBreadType("White");
                 setToasted(true);
+                setName("Philly Cheese Steak");
                 this.addTopping(new Meat("Steak", false, 0));
                 this.addTopping(new Cheese("American", false, 0));
                 this.addTopping(new RegularTopping("Peppers", false, 0));
@@ -36,6 +38,7 @@ public class SignatureSandwich extends Sandwich {
                 setSize(12);
                 setBreadType("Wheat");
                 setToasted(true);
+                setName("Chicken Bacon Ranch");
                 this.addTopping(new Meat("Chicken", false, 0));
                 this.addTopping(new Meat("Bacon", false, 0));
                 this.addTopping(new Cheese("Swiss", false, 0));
@@ -44,10 +47,11 @@ public class SignatureSandwich extends Sandwich {
                 this.addTopping(new RegularTopping("Onions", false, 0));
                 this.addTopping(new RegularTopping("Ranch", false, 0));
                 break;
-            case "the veggie deluxe":
+            case "veggie deluxe":
                 setSize(8);
                 setBreadType("Wrap");
                 setToasted(false);
+                setName("Veggie Deluxe");
                 this.addTopping(new Cheese("Provolone", false, 0));
                 this.addTopping(new RegularTopping("Lettuce", false, 0));
                 this.addTopping(new RegularTopping("Peppers", false, 0));
@@ -61,6 +65,7 @@ public class SignatureSandwich extends Sandwich {
                 setSize(12);
                 setBreadType("White");
                 setToasted(true);
+                setName("Italian Sub");
                 this.addTopping(new Meat("Salami", false, 0));
                 this.addTopping(new Meat("Ham", false, 0));
                 this.addTopping(new Cheese("Cheddar", false, 0));
@@ -75,6 +80,7 @@ public class SignatureSandwich extends Sandwich {
                 setSize(8);
                 setBreadType("Rye");
                 setToasted(true);
+                setName("Smoky BBQ Club");
                 this.addTopping(new Meat("Chicken", false, 0));
                 this.addTopping(new Meat("Bacon", false, 0));
                 this.addTopping(new Cheese("Cheddar", false, 0));
@@ -82,10 +88,11 @@ public class SignatureSandwich extends Sandwich {
                 this.addTopping(new RegularTopping("Onions", false, 0));
                 this.addTopping(new RegularTopping("BBQ", false, 0));
                 break;
-            case "the jack of all sandwiches":
+            case "jack of all sandwiches":
                 setSize(12);
                 setBreadType("White");
                 setToasted(true);
+                setName("Jack of All Sandwiches");
                 this.addTopping(new Meat("Ham", false, 0));
                 this.addTopping(new Meat("Chicken", false, 0));
                 this.addTopping(new Meat("Salami", false, 0));
@@ -112,7 +119,17 @@ public class SignatureSandwich extends Sandwich {
     }
 
     // display signature sandwich
-    public String getSignatureSandwich() {
-        return this.name + " " + getSandwich();
+    @Override
+    public String getSandwich() {
+        // creates string builder
+        StringBuilder sandwichBuilder = new StringBuilder();
+        // appends signature sandwich name
+        sandwichBuilder.append(this.name).append(" ");
+        // appends bread size, inch, and bread type (4 inch wheat)
+        sandwichBuilder.append(this.getSize()).append(" inch ").append(this.getBreadType());
+        // if the sandwich is toasted then appends toasted, if not toasted doesn't append it
+        if (this.isToasted()) sandwichBuilder.append(" Toasted");
+        // returns the full string to display
+        return sandwichBuilder.toString();
     }
 }
