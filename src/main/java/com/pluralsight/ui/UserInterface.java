@@ -159,6 +159,7 @@ public class UserInterface {
         // creates a new sandwich using user input
         Sandwich sandwich = new Sandwich(getBreadSize(), getBreadType(), isToasted());
 
+        // loops through toppings and adds topping to sandwich
         for (Meat meat : meatToppings()) {
             sandwich.addTopping(meat);
         }
