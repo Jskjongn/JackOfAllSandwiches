@@ -39,20 +39,24 @@ public class UserInterface {
                             case 1:
                                 addSandwich();
                                 break;
-                            // adds a drink
+                            // adds a signature sandwich
                             case 2:
+                                addSignatureSandwich();
+                                break;
+                            // adds a drink
+                            case 3:
                                 addDrink();
                                 break;
                             // adds chips
-                            case 3:
+                            case 4:
                                 addChips();
                                 break;
                             // adds dessert
-                            case 4:
+                            case 5:
                                 addDessert();
                                 break;
                             // checks out and creates receipt
-                            case 5:
+                            case 6:
                                 checkout();
                                 break;
                                 // cancels order and returns to home screen
@@ -118,10 +122,11 @@ public class UserInterface {
                 ┃==============================┃
                 ┃   What are you hungry for?   ┃
                 ┃        1) Add Sandwich       ┃
-                ┃        2) Add Drink          ┃
-                ┃        3) Add Chips          ┃
-                ┃        4) Add Dessert        ┃
-                ┃        5) Checkout           ┃
+                ┃        2) Add Signature      ┃
+                ┃        3) Add Drink          ┃
+                ┃        4) Add Chips          ┃
+                ┃        5) Add Dessert        ┃
+                ┃        6) Checkout           ┃
                 ┃        0) Cancel Order       ┃
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                 """);
@@ -141,7 +146,6 @@ public class UserInterface {
     // puts together the order as user chooses sandwiches and sides
 
     public static void addSandwich() {
-
         // eats leftover
         userInput.nextLine();
 
@@ -170,12 +174,61 @@ public class UserInterface {
         System.out.println(sandwich.getSandwich() + " " + sandwich.getToppings() + " was added to the order!");
     }
 
+    public static void addSignatureSandwich() {
+        // eats leftover
+        userInput.nextLine();
+
+        // displays list of signature sandwiches
+        listOfSignatureSandwiches();
+
+        // creates a new order if user didn't add their own sandwich
+        if (order == null) {
+            order = new Order(getCustomerName(), isTakeOut());
+        }
+
+        // creates map for matching user input
+        Map<String, String> signatureList = new HashMap<>();
+        signatureList.put("blt", "BLT");
+        signatureList.put("ph", "Philly Cheese Steak");
+        signatureList.put("ch", "Chicken Bacon Ranch");
+        signatureList.put("veg", "Veggie Deluxe");
+        signatureList.put("it", "Italian Sub");
+        signatureList.put("sm", "Smoky BBQ Club");
+        signatureList.put("j", "Jack of All Sandwiches");
+
+        String signatureName = "";
+        while (true) {
+            // prompts user to enter signature sandwich or cancel
+            System.out.print("Enter signature sandwich (Type \"Cancel\" to cancel signature sandwich order): ");
+            String signatureChoice = userInput.nextLine().toLowerCase().trim();
+            // returns back to screen
+            if (signatureChoice.equals("cancel")) {
+                return;
+            }
+            // matches user input to signature sandwich names
+            signatureName = lookupItem(signatureChoice, signatureList);
+
+            if (signatureName == null) {
+                System.out.println("Please enter valid signature sandwich!");
+            } else {
+                break;
+            }
+        }
+
+        // creates signature sandwich and adds it the either existing order or new order
+        SignatureSandwich signatureSandwich = new SignatureSandwich(signatureName);
+        order.addSandwich(signatureSandwich);
+        // displays signature sandwich
+        System.out.println("Signature Sandwich: " + signatureName + " was added!");
+    }
+
     public static void addDrink() {
         // eats leftover
         userInput.nextLine();
 
         // displays list of drinks and creates map list for user input
         listOfDrinks();
+
         Map<String, String> drinkList = new HashMap<>();
         drinkList.put("co", "Coke");
         drinkList.put("p", "Pepsi");
@@ -239,6 +292,7 @@ public class UserInterface {
 
         // displays list of chips and creates map list for user input
         listOfChips();
+
         Map<String, String> chipList = new HashMap<>();
         chipList.put("l", "Lay's");
         chipList.put("s", "SunChips");
@@ -277,6 +331,7 @@ public class UserInterface {
 
         // displays list of dessert and creates map list for user input
         listOfDesserts();
+
         Map<String, String> dessertList = new HashMap<>();
         dessertList.put("van", "Vanilla Ice Cream");
         dessertList.put("cho", "Chocolate Ice Cream");
@@ -313,19 +368,22 @@ public class UserInterface {
         // eats leftover
         userInput.nextLine();
 
+        // prompts user with order details
         System.out.println("Here is your current order:\n");
         System.out.print(order.getOrder());
 
+        // prompts user to confirm order or cancel order
         System.out.print("\n\nEnter \"Confirm\" to checkout or \"Cancel\" to cancel order: ");
         String option = userInput.nextLine().toLowerCase().trim();
 
+        // if its confirm then writes a receipt
         if (option.equals("confirm")) {
             System.out.println("Order confirmed, thank you!");
             ReceiptFileManager fileManager = new ReceiptFileManager();
             fileManager.saveReceipt(order);
+            // if cancel it goes back to order screen to continue adding items
         } else if (option.equals("cancel")) {
             System.out.println("Order canceled, come back again!");
-            //order = null;
         } else {
             System.out.println("Please either \"Confirm\" or \"Cancel\" order!");
         }
@@ -900,6 +958,22 @@ public class UserInterface {
                 ┃      Chocolate Ice Cream     ┃
                 ┃    12" Cookie    Brownies    ┃
                 ┃ Rice Krispies    Cheesecake  ┃
+                ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                """);
+    }
+
+    public static void listOfSignatureSandwiches() {
+        System.out.print("""
+                ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                ┃   ~ Signature Sandwiches ~   ┃
+                ┃==============================┃
+                ┃ BLT                    $10.50┃
+                ┃ Philly Cheese Steak    $10.50┃
+                ┃ Chicken Bacon Ranch    $16.75┃
+                ┃ Veggie Deluxe          $8.50 ┃
+                ┃ Italian Sub            $16.75┃
+                ┃ Smoky BBQ Club         $12.50┃
+                ┃ Jack of All Sandwiches $22.00┃
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                 """);
     }
