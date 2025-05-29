@@ -74,3 +74,71 @@ com.pluralsight
 └── SandwichApp.java
 
 ## Project Diagram
+
+classDiagram
+    class Order {
+        -String orderName
+        -List~Sandwich~ sandwiches
+        -List~Priceable~ sides
+        +addSandwich(Sandwich)
+        +addSide(Priceable)
+        +getTotal()
+        +getOrder()
+    }
+
+    class Sandwich {
+        -int size
+        -String breadType
+        -boolean isToasted
+        -List~Topping~ toppings
+        +addTopping(Topping)
+        +getPrice()
+    }
+
+    class Topping {
+        <<abstract>>
+        -String name
+        -boolean isExtra
+        +getPrice(int)
+    }
+
+    class PremiumTopping {
+        <<abstract>>
+        +getPrice(int)
+    }
+
+    class Meat
+    class Cheese
+    class RegularTopping
+
+    class Priceable {
+        <<interface>>
+        +getPrice()
+    }
+
+    class Drink
+    class Chips
+    class Dessert
+
+    class ReceiptFileManager {
+        +saveReceipt(Order)
+    }
+
+    class UserInterface {
+        +display()
+        +addSandwich()
+        +checkout()
+    }
+
+    Order --> Sandwich
+    Order --> Priceable
+    Sandwich --> Topping
+    Topping <|-- PremiumTopping
+    PremiumTopping <|-- Meat
+    PremiumTopping <|-- Cheese
+    Topping <|-- RegularTopping
+    Sandwich --> Priceable
+    Drink --> Priceable
+    Chips --> Priceable
+    Dessert --> Priceable
+
