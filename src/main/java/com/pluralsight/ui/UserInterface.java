@@ -530,7 +530,7 @@ public class UserInterface {
         // eats leftover
         userInput.nextLine();
 
-        // displays list of drinks and creates map list for user input
+        // displays list of chips and creates map list for user input
         listOfChips();
         Map<String, String> chipList = new HashMap<>();
         chipList.put("l", "Lay's");
@@ -565,7 +565,41 @@ public class UserInterface {
     }
 
     public static void addDessert() {
+        // eats leftover
+        userInput.nextLine();
 
+        // displays list of dessert and creates map list for user input
+        listOfDesserts();
+        Map<String, String> dessertList = new HashMap<>();
+        dessertList.put("van", "Vanilla Ice Cream");
+        dessertList.put("cho", "Chocolate Ice Cream");
+        dessertList.put("12", "12\" Cookie");
+        dessertList.put("b", "Brownies");
+        dessertList.put("r", "Rice Krispies");
+        dessertList.put("che", "Cheesecake");
+
+        String dessertName = "";
+        while (true) {
+            // prompts user to enter dessert or cancel to not add dessert
+            System.out.print("Enter a dessert (Type \"Cancel\" to cancel dessert order): ");
+            String dessertChoice = userInput.nextLine().toLowerCase().trim();
+            // returns back to screen
+            if (dessertChoice.equals("cancel")) {
+                return;
+            }
+            // finds matching dessert with user input
+            dessertName = lookupItem(dessertChoice, dessertList);
+            // if its null it'll ask again
+            if (dessertName == null) {
+                System.out.println("Please enter valid dessert!");
+            } else {
+                break;
+            }
+        }
+        // creates new dessert and adds it to the order and then displays
+        Dessert dessert = new Dessert(dessertName);
+        order.addSide(dessert);
+        System.out.print(dessert + " was added to order!");
     }
 
     public static void checkout() {
