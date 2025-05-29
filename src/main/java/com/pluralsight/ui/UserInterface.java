@@ -174,7 +174,7 @@ public class UserInterface {
         }
 
         // creates the new order
-        Order order = new Order(customerName, isTakeOut);
+        order = new Order(customerName, isTakeOut);
 
         // lists bread sizes and prompts for bread size
         listOfBreadSizes();
@@ -459,10 +459,71 @@ public class UserInterface {
 
         // adds completed sandwich to the order
         order.addSandwich(sandwich);
+        // displays sandwich created
+        System.out.println(sandwich.getSandwich() + " was added to the order!");
     }
 
     public static void addDrink() {
+        // eats leftover
+        userInput.nextLine();
 
+        // displays list of drinks and creates map list for user input
+        listOfDrinks();
+        Map<String, String> drinkList = new HashMap<>();
+        drinkList.put("co", "Coke");
+        drinkList.put("p", "Pepsi");
+        drinkList.put("sp", "Sprite");
+        drinkList.put("dr", "Dr Pepper");
+        drinkList.put("di", "Diet Coke");
+        drinkList.put("m", "Mt Dew");
+        drinkList.put("sw", "Sweet Tea");
+        drinkList.put("un", "Unsweet Tea");
+        drinkList.put("j", "Juice");
+        drinkList.put("w", "Water");
+
+        String drinkName = "";
+        while (true) {
+            // prompts user to enter a drink or cancel to not add a drink
+            System.out.print("Enter a drink (Type \"Cancel\" to cancel drink order): ");
+            String drinkChoice = userInput.nextLine().toLowerCase().trim();
+            // returns back to screen
+            if (drinkChoice.equals("cancel")) {
+                return;
+            }
+            // finds matching drink with user input
+            drinkName = lookupTopping(drinkChoice, drinkList);
+            // if its null it'll ask again
+            if (drinkName == null) {
+                System.out.println("Please enter a valid drink!");
+            } else {
+                break;
+            }
+        }
+
+        String drinkSize = "";
+        while (true) {
+            // prompts user to enter a drink size
+            System.out.print("Enter a drink size: ");
+            drinkSize = userInput.nextLine().toLowerCase().trim();
+            // gets user input to match to drink size
+            if (drinkSize.startsWith("s")) {
+                drinkSize = "Small";
+                break;
+            } else if (drinkSize.startsWith("m")) {
+                drinkSize = "Medium";
+                break;
+            } else if (drinkSize.startsWith("l")) {
+                drinkSize = "Large";
+                break;
+            } else {
+                System.out.print("Please enter a drink size!");
+            }
+        }
+        // creates a new drink and adds it to the order
+        Drink drink = new Drink(drinkName, drinkSize);
+        order.addSide(drink);
+        // displays drink
+        System.out.println(drink + " was added to the order!");
     }
 
     public static void addChips() {
