@@ -124,9 +124,9 @@ public class SignatureSandwich extends Sandwich {
         // creates string builder
         StringBuilder sandwichBuilder = new StringBuilder();
         // appends signature sandwich name
-        sandwichBuilder.append(this.name).append(" ");
+        sandwichBuilder.append(this.name).append(":\n");
         // appends bread size, inch, and bread type (4 inch wheat)
-        sandwichBuilder.append(this.getSize()).append(" inch ").append(this.getBreadType());
+        sandwichBuilder.append(" ").append(this.getSize()).append(" inch ").append(this.getBreadType());
         // if the sandwich is toasted then appends toasted, if not toasted doesn't append it
         if (this.isToasted()) sandwichBuilder.append(" Toasted");
         // returns the full string to display

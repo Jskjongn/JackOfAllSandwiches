@@ -58,11 +58,17 @@ public class Order {
         // creates string builder
         StringBuilder receiptBuilder = new StringBuilder();
 
+        // sandwich shop name and address
+        receiptBuilder.append("     Jack of All Sandwiches\n");
+        receiptBuilder.append("             \uD83C\uDCDC\uD83C\uDCDA\uD83C\uDCD6\uD83C\uDCC1\uD83C\uDCAD\uD83C\uDCBA\n");
+        receiptBuilder.append("      123 Plae Grownd Stret\n");
+        receiptBuilder.append("      Fort Worth, TX, 76006\n");
+
         // receipt header with customer name and displays either eat in or take out
-        receiptBuilder.append("Order for ").append(this.orderName).append("\n");
-        receiptBuilder.append("--------------------------------------\n");
+        receiptBuilder.append("\nOrder for: ").append(this.orderName).append("\n");
+        receiptBuilder.append("--------------------------------\n");
         String eatInOrTakeOut = isTakeOut ? "Take-Out" : "Eat-In";
-        receiptBuilder.append("              ").append(eatInOrTakeOut).append("                \n\n");
+        receiptBuilder.append("             ").append(eatInOrTakeOut).append("\n\n");
 
         // displays each sandwich's details and its toppings
         for (Sandwich sandwich : sandwiches) {
@@ -78,14 +84,24 @@ public class Order {
             receiptBuilder.append("1 ").append(side.toString())
                     .append(" - $").append(String.format("%.2f", side.getPrice())).append("\n");
         }
-
-        receiptBuilder.append("--------------------------------------\n");
-        receiptBuilder.append("Total: $").append(String.format("%.2f", getTotal())).append("\n");
+        // displays subtotal, tax, and total
+        double tax = getTotal() * 0.10;
+        double total = getTotal() + tax;
+        receiptBuilder.append("--------------------------------\n");
+        receiptBuilder.append("SUBTOTAL:                 $").append(String.format("%.2f", getTotal())).append("\n");
+        receiptBuilder.append("TAX:                      $").append(String.format("%.2f", tax)).append("\n");
+        receiptBuilder.append("TOTAL:                    $").append(String.format("%.2f", total)).append("\n");;
+        // displays tip and total
+        receiptBuilder.append("\nTip:   _________________________\n");
+        receiptBuilder.append("TOTAL: _________________________\n");
 
         // gets the current time and date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-hhmmss a");
-        receiptBuilder.append("            ").append(LocalDateTime.now().format(formatter)).append("              \n");
-        receiptBuilder.append("   Thank you, and please come again!   ");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a MM/dd/yy");
+        receiptBuilder.append("\n        ").append(LocalDateTime.now().format(formatter)).append("              \n\n");
+        receiptBuilder.append("     ║▌║█║▌│║▌║▌█ ▌│█║▌║▌║\n");
+        receiptBuilder.append("     ║▌║█║▌│║▌║▌█ ▌│█║▌║▌║\n");
+        receiptBuilder.append("\n         Customer Copy\n");
+        receiptBuilder.append("\nThank you, and please come again!");
 
         // puts receipt together into a string
         return receiptBuilder.toString();
