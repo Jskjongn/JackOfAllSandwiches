@@ -57,9 +57,13 @@ public class UserInterface {
                                 break;
                             // checks out and creates receipt
                             case 6:
-                                checkout();
+                                // if true then breaks out of loop and clears order
+                                if (checkout()) {
+                                    order = null;
+                                    orderRunning = false;
+                                }
                                 break;
-                                // cancels order and returns to home screen
+                                // cancels and clears order and returns to home screen
                             case 0:
                                 System.out.println("Canceling order... Returning back to home screen!");
                                 orderRunning = false;
@@ -364,7 +368,7 @@ public class UserInterface {
         System.out.println(dessert + " was added to order!");
     }
 
-    public static void checkout() {
+    public static boolean checkout() {
         // eats leftover
         userInput.nextLine();
 
@@ -381,12 +385,16 @@ public class UserInterface {
             System.out.println("Order confirmed, thank you!");
             ReceiptFileManager fileManager = new ReceiptFileManager();
             fileManager.saveReceipt(order);
+            //returns back to home screen instead of order screen
+            return true;
             // if cancel it goes back to order screen to continue adding items
         } else if (option.equals("cancel")) {
-            System.out.println("Order canceled, come back again!");
+            System.out.println("Returning back to Order Screen!");
         } else {
             System.out.println("Please either \"Confirm\" or \"Cancel\" order!");
         }
+        // if cancels returns to order screen
+        return false;
     }
 
     // -------------------------------------------------------------------------------------------------------
@@ -395,10 +403,10 @@ public class UserInterface {
     public static void welcomeMessage() throws InterruptedException {
 
         // loading bar
-//        for (int i = 0; i <= 100; i++) {
-//            Thread.sleep(30);
-//            System.out.print("\rLoading... " + i + "%");
-//        }
+        for (int i = 0; i <= 100; i++) {
+            Thread.sleep(30);
+            System.out.print("\rLoading... " + i + "%");
+        }
 
         // greeting message
         System.out.print("\n");
@@ -411,7 +419,7 @@ public class UserInterface {
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
                 """);
 
-        //Thread.sleep(1500);
+        Thread.sleep(1500);
     }
 
     // displays exit message
