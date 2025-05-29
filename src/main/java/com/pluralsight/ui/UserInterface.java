@@ -261,7 +261,7 @@ public class UserInterface {
             if (meatChoice.equals("done")) break;
 
             // calls method for matching user input to meat list
-            String meatType = lookupTopping(meatChoice, meatList);
+            String meatType = lookupItem(meatChoice, meatList);
 
             // if the type is null, it restarts loop
             if (meatType == null) {
@@ -314,7 +314,7 @@ public class UserInterface {
             if (cheeseChoice.equals("done")) break;
 
             // matching user input with list
-            String cheeseType = lookupTopping(cheeseChoice, cheeseList);
+            String cheeseType = lookupItem(cheeseChoice, cheeseList);
 
             if (cheeseType == null) {
                 System.out.println("Please enter a cheese type!");
@@ -370,7 +370,7 @@ public class UserInterface {
 
             if (toppingChoice.equals("done")) break;
 
-            String toppingType = lookupTopping(toppingChoice, toppingList);
+            String toppingType = lookupItem(toppingChoice, toppingList);
 
             if (toppingType == null) {
                 System.out.println("Please enter a topping type!");
@@ -423,7 +423,7 @@ public class UserInterface {
 
             if (sauceChoice.equals("done")) break;
 
-            String sauceType = lookupTopping(sauceChoice, sauceList);
+            String sauceType = lookupItem(sauceChoice, sauceList);
 
             if (sauceType == null) {
                 System.out.println("Please enter a sauce type!");
@@ -491,7 +491,7 @@ public class UserInterface {
                 return;
             }
             // finds matching drink with user input
-            drinkName = lookupTopping(drinkChoice, drinkList);
+            drinkName = lookupItem(drinkChoice, drinkList);
             // if its null it'll ask again
             if (drinkName == null) {
                 System.out.println("Please enter a valid drink!");
@@ -527,7 +527,41 @@ public class UserInterface {
     }
 
     public static void addChips() {
+        // eats leftover
+        userInput.nextLine();
 
+        // displays list of drinks and creates map list for user input
+        listOfChips();
+        Map<String, String> chipList = new HashMap<>();
+        chipList.put("l", "Lay's");
+        chipList.put("s", "SunChips");
+        chipList.put("d", "Doritos");
+        chipList.put("r", "Ruffles");
+        chipList.put("c", "Cheetos");
+        chipList.put("f", "Fritos");
+
+        String chipName = "";
+        while (true) {
+            // prompts user to enter chips or cancel to not add chips
+            System.out.print("Enter chips (Type \"Cancel\" to cancel chips order): ");
+            String chipChoice = userInput.nextLine().toLowerCase().trim();
+            // returns back to screen
+            if (chipChoice.equals("cancel")) {
+                return;
+            }
+            // finds matching chips with user input
+            chipName = lookupItem(chipChoice, chipList);
+            // if its null it'll ask again
+            if (chipName == null) {
+                System.out.println("Please enter valid chips!");
+            } else {
+                break;
+            }
+        }
+        // creates new chips and adds it to the order and then displays
+        Chips chips = new Chips(chipName);
+        order.addSide(chips);
+        System.out.print(chips + " was added to order!");
     }
 
     public static void addDessert() {
@@ -588,7 +622,7 @@ public class UserInterface {
     // -------------------------------------------------------------------------------------------------------
 
     // helper method to compare user input to a list of toppings and match them
-    public static String lookupTopping(String choice, Map<String, String> list) {
+    public static String lookupItem(String choice, Map<String, String> list) {
         for (Map.Entry<String, String> entry : list.entrySet()) {
             if (choice.startsWith(entry.getKey())) {
                 return entry.getValue();
