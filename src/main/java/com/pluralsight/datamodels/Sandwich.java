@@ -1,6 +1,7 @@
 package com.pluralsight.datamodels;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Sandwich implements Priceable{
 
@@ -32,7 +33,15 @@ public class Sandwich implements Priceable{
     }
 
     public ArrayList<Topping> getToppings() {
+        // returns list of toppings
         return this.toppings;
+    }
+
+    public String getFormattedToppings() {
+        // returns list of toppings to display
+        return toppings.stream()
+                .map(Topping::toString)
+                .collect(Collectors.joining(", "));
     }
 
     @Override

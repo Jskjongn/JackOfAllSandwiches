@@ -153,30 +153,47 @@ public class UserInterface {
         // eats leftover
         userInput.nextLine();
 
-        // creates the new order
-        order = new Order(getCustomerName(), isTakeOut());
-
-        // creates a new sandwich using user input
-        Sandwich sandwich = new Sandwich(getBreadSize(), getBreadType(), isToasted());
-
-        // loops through toppings and adds topping to sandwich
-        for (Meat meat : meatToppings()) {
-            sandwich.addTopping(meat);
-        }
-        for (Cheese cheese : cheeseToppings()) {
-            sandwich.addTopping(cheese);
-        }
-        for (RegularTopping regularTopping : regularToppings()) {
-            sandwich.addTopping(regularTopping);
-        }
-        for (RegularTopping sauce : sauceToppings()) {
-            sandwich.addTopping(sauce);
+        // creates the new order is there already isn't one
+        if (order == null) {
+            order = new Order(getCustomerName(), isTakeOut());
         }
 
-        // adds completed sandwich to the order
-        order.addSandwich(sandwich);
-        // displays sandwich created
-        System.out.println(sandwich.getSandwich() + " " + sandwich.getToppings() + " was added to the order!");
+        boolean addingSandwich = true;
+
+        while (addingSandwich) {
+            // creates a new sandwich using user input
+            Sandwich sandwich = new Sandwich(getBreadSize(), getBreadType(), isToasted());
+
+            // loops through toppings and adds topping to sandwich
+            for (Meat meat : meatToppings()) {
+                sandwich.addTopping(meat);
+            }
+            for (Cheese cheese : cheeseToppings()) {
+                sandwich.addTopping(cheese);
+            }
+            for (RegularTopping regularTopping : regularToppings()) {
+                sandwich.addTopping(regularTopping);
+            }
+            for (RegularTopping sauce : sauceToppings()) {
+                sandwich.addTopping(sauce);
+            }
+
+            // adds completed sandwich to the order
+            order.addSandwich(sandwich);
+            // displays sandwich created
+            System.out.println(sandwich.getSandwich() + " " + sandwich.getFormattedToppings() + " was added to the order!");
+
+            // prompt if user wants to add another sandwich
+            System.out.print("\nAdd another sandwich? (Yes/No): ");
+            String choice = userInput.nextLine().toLowerCase().trim();
+
+            if (choice.equals("yes") || choice.equals("y")) {
+                System.out.println("Creating new sandwich!");
+            } else if (choice.equals("no") || choice.equals("n")){
+                System.out.println("Returning back to Order Screen!");
+                addingSandwich = false;
+            }
+        }
     }
 
     public static void addSignatureSandwich() {
@@ -204,7 +221,7 @@ public class UserInterface {
         String signatureName = "";
         while (true) {
             // prompts user to enter signature sandwich or cancel
-            System.out.print("Enter signature sandwich (Type \"Cancel\" to cancel signature sandwich order): ");
+            System.out.print("Enter signature sandwich (Enter \"Cancel\" to cancel signature sandwich order): ");
             String signatureChoice = userInput.nextLine().toLowerCase().trim();
             // returns back to screen
             if (signatureChoice.equals("cancel")) {
@@ -249,7 +266,7 @@ public class UserInterface {
         String drinkName = "";
         while (true) {
             // prompts user to enter a drink or cancel to not add a drink
-            System.out.print("Enter a drink (Type \"Cancel\" to cancel drink order): ");
+            System.out.print("Enter a drink (Enter \"Cancel\" to cancel drink order): ");
             String drinkChoice = userInput.nextLine().toLowerCase().trim();
             // returns back to screen
             if (drinkChoice.equals("cancel")) {
@@ -309,7 +326,7 @@ public class UserInterface {
         String chipName = "";
         while (true) {
             // prompts user to enter chips or cancel to not add chips
-            System.out.print("Enter chips (Type \"Cancel\" to cancel chips order): ");
+            System.out.print("Enter chips (Enter \"Cancel\" to cancel chips order): ");
             String chipChoice = userInput.nextLine().toLowerCase().trim();
             // returns back to screen
             if (chipChoice.equals("cancel")) {
@@ -348,7 +365,7 @@ public class UserInterface {
         String dessertName = "";
         while (true) {
             // prompts user to enter dessert or cancel to not add dessert
-            System.out.print("Enter a dessert (Type \"Cancel\" to cancel dessert order): ");
+            System.out.print("Enter a dessert (Enter \"Cancel\" to cancel dessert order): ");
             String dessertChoice = userInput.nextLine().toLowerCase().trim();
             // returns back to screen
             if (dessertChoice.equals("cancel")) {
@@ -392,7 +409,7 @@ public class UserInterface {
         } else if (option.equals("cancel")) {
             System.out.println("Returning back to Order Screen!");
         } else {
-            System.out.println("Please either \"Confirm\" or \"Cancel\" order!");
+            System.out.println("Please either enter \"Confirm\" or \"Cancel\" order!");
         }
         // if cancels returns to order screen
         return false;
@@ -575,7 +592,7 @@ public class UserInterface {
 
         // prompts user to choose meat types and extras until done is entered
         while (true) {
-            System.out.print("Enter choice of meat (Type \"done\" when done picking meats!): ");
+            System.out.print("Enter choice of meat (Enter \"done\" when done picking meats!): ");
             String meatChoice = userInput.nextLine().toLowerCase().trim();
 
             // stops loop if equals done
@@ -590,6 +607,9 @@ public class UserInterface {
                 continue;
             }
 
+            // displays meat added
+            System.out.println("Meat Topping: " + meatType + " was added!");
+
             // prompts user for extra meats
             boolean isExtraMeat = false;
             int extraMeat = 0;
@@ -599,10 +619,11 @@ public class UserInterface {
                 // if yes then how many extras
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraMeat = true;
-                    System.out.print("Enter how much extra" + meatType + "? (1, 2, etc): ");
+                    System.out.print("Enter how much extra" + meatType + " ? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraMeat = userInput.nextInt();
                         userInput.nextLine();
+                        System.out.println(extraMeat + "x extra " + meatType + " added!");
                         break;
                     }
                     // if no then nothing is added and moves on
@@ -618,8 +639,6 @@ public class UserInterface {
 
             // adds meat to meats topping list
             meats.add(new Meat(meatType, isExtraMeat, extraMeat));
-            // displays meat added
-            System.out.println("Meat Topping: " + meatType + " was added!");
         }
         // returns list of meats
         return meats;
@@ -641,7 +660,7 @@ public class UserInterface {
 
         // prompts user to add cheeses and if any extras
         while (true) {
-            System.out.print("Enter choice of cheese (Type \"done\" when done picking cheese!): ");
+            System.out.print("Enter choice of cheese (Enter \"done\" when done picking cheese!): ");
             String cheeseChoice = userInput.nextLine().toLowerCase().trim();
 
             if (cheeseChoice.equals("done")) break;
@@ -654,6 +673,9 @@ public class UserInterface {
                 continue;
             }
 
+            // displays cheese added
+            System.out.println("Cheese Topping: " + cheeseType + " was added!");
+
             // prompts user for extra cheese and how many or if no extra
             boolean isExtraCheese = false;
             int extraCheese = 0;
@@ -663,10 +685,11 @@ public class UserInterface {
 
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraCheese = true;
-                    System.out.print("Enter how much extra " + cheeseType + "? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + cheeseType + " ? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraCheese = userInput.nextInt();
                         userInput.nextLine();
+                        System.out.println(extraCheese + "x extra " + cheeseType + " added!");
                         break;
                     }
                 } else if (choice.equals("no") || choice.equals("n")) {
@@ -681,8 +704,6 @@ public class UserInterface {
 
             // adds cheese toppings to sandwich
             cheeses.add(new Cheese(cheeseType, isExtraCheese, extraCheese));
-            // displays cheese added
-            System.out.println("Cheese Topping: " + cheeseType + " was added!");
         }
         return cheeses;
     }
@@ -709,7 +730,7 @@ public class UserInterface {
 
         // prompts user to add regular toppings and if any extras
         while (true) {
-            System.out.print("Enter choice of regular topping (Type \"done\" when done picking topping!): ");
+            System.out.print("Enter choice of regular topping (Enter \"done\" when done picking topping!): ");
             String toppingChoice = userInput.nextLine().toLowerCase().trim();
 
             if (toppingChoice.equals("done")) break;
@@ -722,6 +743,9 @@ public class UserInterface {
                 continue;
             }
 
+            // displays topping added
+            System.out.println("Regular Topping: " + toppingType + " was added!");
+
             // prompts user for extra toppings
             boolean isExtraTopping = false;
             int extraTopping = 0;
@@ -731,10 +755,11 @@ public class UserInterface {
 
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraTopping = true;
-                    System.out.print("Enter how much extra " + toppingType + "? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + toppingType + " ? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraTopping = userInput.nextInt();
                         userInput.nextLine();
+                        System.out.println(extraTopping + "x extra " + toppingType + " added!");
                         break;
                     }
                 } else if (choice.equals("no") || choice.equals("n")) {
@@ -749,8 +774,6 @@ public class UserInterface {
 
             // adds regular toppings to sandwich
             regularToppings.add(new RegularTopping(toppingType, isExtraTopping, extraTopping));
-            // displays topping added
-            System.out.println("Regular Topping: " + toppingType + " was added!");
         }
         return regularToppings;
     }
@@ -774,7 +797,7 @@ public class UserInterface {
 
         // prompts user to add sauces and if any extras
         while (true) {
-            System.out.print("Enter choice of sauces (Type \"done\" when done picking sauces!): ");
+            System.out.print("Enter choice of sauces (Enter \"done\" when done picking sauces!): ");
             String sauceChoice = userInput.nextLine().toLowerCase().trim();
 
             if (sauceChoice.equals("done")) break;
@@ -786,6 +809,9 @@ public class UserInterface {
                 continue;
             }
 
+            // displays sauce added
+            System.out.println("Sauce Topping: " + sauceType + " was added!");
+
             boolean isExtraSauce = false;
             int extraSauce = 0;
             while (true) {
@@ -794,10 +820,11 @@ public class UserInterface {
 
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraSauce = true;
-                    System.out.print("Enter how much extra " + sauceType + "? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + sauceType + " ? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraSauce = userInput.nextInt();
                         userInput.nextLine();
+                        System.out.println(extraSauce + "x extra " + sauceType + " added!");
                         break;
                     }
                 } else if (choice.equals("no") || choice.equals("n")) {
@@ -812,8 +839,6 @@ public class UserInterface {
 
             // adds sauce toppings to sandwich
             sauces.add(new RegularTopping(sauceType, isExtraSauce, extraSauce));
-            // displays sauce added
-            System.out.println("Sauce Topping: " + sauceType + " was added!");
         }
         return sauces;
     }

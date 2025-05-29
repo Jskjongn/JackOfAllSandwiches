@@ -93,7 +93,7 @@ public class Order {
         receiptBuilder.append("TOTAL:                    $").append(String.format("%.2f", total)).append("\n");;
         // displays tip and total
         receiptBuilder.append("\nTip:   _________________________\n");
-        receiptBuilder.append("TOTAL: _________________________\n");
+        receiptBuilder.append("\nTOTAL: _________________________\n");
 
         // gets the current time and date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a MM/dd/yy");
