@@ -56,7 +56,7 @@ public class UserInterface {
                             // checks out and creates receipt
                             case 5:
                                 checkout();
-                                continue;
+                                break;
                                 // cancels order and returns to home screen
                             case 0:
                                 System.out.println("Canceling order... Returning back to home screen!");
@@ -460,7 +460,7 @@ public class UserInterface {
         // adds completed sandwich to the order
         order.addSandwich(sandwich);
         // displays sandwich created
-        System.out.println(sandwich.getSandwich() + " was added to the order!");
+        System.out.println(sandwich.getSandwich() + " " + sandwich.getToppings() + " was added to the order!");
     }
 
     public static void addDrink() {
@@ -561,7 +561,7 @@ public class UserInterface {
         // creates new chips and adds it to the order and then displays
         Chips chips = new Chips(chipName);
         order.addSide(chips);
-        System.out.print(chips + " was added to order!");
+        System.out.println(chips + " was added to order!");
     }
 
     public static void addDessert() {
@@ -599,11 +599,29 @@ public class UserInterface {
         // creates new dessert and adds it to the order and then displays
         Dessert dessert = new Dessert(dessertName);
         order.addSide(dessert);
-        System.out.print(dessert + " was added to order!");
+        System.out.println(dessert + " was added to order!");
     }
 
     public static void checkout() {
+        // eats leftover
+        userInput.nextLine();
 
+        System.out.println("Here is your current order:");
+        System.out.print(order.getOrder());
+
+        System.out.print("\n\nEnter \"Confirm\" to checkout or \"Cancel\" to cancel order: ");
+        String option = userInput.nextLine().toLowerCase().trim();
+
+        if (option.equals("confirm")) {
+            System.out.println("Order confirmed, thank you!");
+            ReceiptFileManager fileManager = new ReceiptFileManager();
+            fileManager.saveReceipt(order);
+        } else if (option.equals("cancel")) {
+            System.out.println("Order canceled, come back again!");
+            order = null;
+        } else {
+            System.out.println("Please either \"Confirm\" or \"Cancel\" order!");
+        }
     }
 
     // -------------------------------------------------------------------------------------------------------

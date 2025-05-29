@@ -65,17 +65,7 @@ public class Sandwich implements Priceable{
         // appends bread size, inch, and bread type (4 inch wheat)
         sandwichBuilder.append(size).append(" inch ").append(breadType);
         // if the sandwich is toasted then appends toasted, if not toasted doesn't append it
-        if (isToasted) sandwichBuilder.append(" toasted ");
-        // appends with
-        sandwichBuilder.append("with ");
-        // for each topping in toppings appends each topping with a comma in between
-        for (Topping topping : toppings) {
-            sandwichBuilder.append(topping).append(", ");
-        }
-        // if the toppings list is empty it removes the last comma and space when list is done
-        if (!toppings.isEmpty()) {
-            sandwichBuilder.setLength(sandwichBuilder.length() - 2);
-        }
+        if (isToasted) sandwichBuilder.append(" Toasted");
         // returns the full string to display
         return sandwichBuilder.toString();
     }
