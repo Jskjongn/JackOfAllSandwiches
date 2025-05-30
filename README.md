@@ -80,31 +80,31 @@ com.pluralsight
 ## 📸 Screenshots
 
 ### Home Screen
-![img.png](img.png)
+![img.png](src/main/resources/Screenshots/img.png)
 
 ### Order Screen
-![img_1.png](img_1.png)
+![img_1.png](src/main/resources/Screenshots/img_1.png)
 
 ### Sandwich Prompts
-![img_2.png](img_2.png)
+![img_2.png](src/main/resources/Screenshots/img_2.png)
 
 ### Meat Toppings
-![img_3.png](img_3.png)
+![img_3.png](src/main/resources/Screenshots/img_3.png)
 
 ### Cheese Toppings
-![img_4.png](img_4.png)
+![img_4.png](src/main/resources/Screenshots/img_4.png)
 
 ### Regular Toppings
-![img_5.png](img_5.png)
+![img_5.png](src/main/resources/Screenshots/img_5.png)
 
 ### Sauces
-![img_6.png](img_6.png)
+![img_6.png](src/main/resources/Screenshots/img_6.png)
 
 ### Signature Sandwiches
-![img_7.png](img_7.png)
+![img_7.png](src/main/resources/Screenshots/img_7.png)
 
 ### Receipt
-![img_8.png](img_8.png)
+![img_8.png](src/main/resources/Screenshots/img_8.png)
 
 ## 💭 Interesting Piece of Code
 ```java
