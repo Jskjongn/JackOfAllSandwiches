@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JackOfAllSandwiches:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JackOfAllSandwiches_jar</output-path>
+    <root id="archive" name="JackOfAllSandwiches.jar">
+      <element id="module-output" name="JackOfAllSandwiches" />
+    </root>
+  </artifact>
+</component>

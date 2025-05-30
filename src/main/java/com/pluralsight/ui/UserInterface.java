@@ -619,7 +619,7 @@ public class UserInterface {
                 // if yes then how many extras
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraMeat = true;
-                    System.out.print("Enter how much extra" + meatType + " ? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + meatType + "? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraMeat = userInput.nextInt();
                         userInput.nextLine();
@@ -685,7 +685,7 @@ public class UserInterface {
 
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraCheese = true;
-                    System.out.print("Enter how much extra " + cheeseType + " ? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + cheeseType + "? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraCheese = userInput.nextInt();
                         userInput.nextLine();
@@ -755,7 +755,7 @@ public class UserInterface {
 
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraTopping = true;
-                    System.out.print("Enter how much extra " + toppingType + " ? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + toppingType + "? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraTopping = userInput.nextInt();
                         userInput.nextLine();
@@ -820,7 +820,7 @@ public class UserInterface {
 
                 if (choice.equals("yes") || choice.equals("y")) {
                     isExtraSauce = true;
-                    System.out.print("Enter how much extra " + sauceType + " ? (1, 2, etc): ");
+                    System.out.print("Enter how much extra " + sauceType + "? (1, 2, etc): ");
                     if (userInput.hasNextInt()) {
                         extraSauce = userInput.nextInt();
                         userInput.nextLine();
